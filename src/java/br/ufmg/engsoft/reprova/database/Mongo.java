@@ -22,7 +22,8 @@ public class Mongo {
   /**
    * Full connection string, obtained from 'REPROVA_MONGO' environment variable.
    */
-  protected static final String endpoint = System.getenv("REPROVA_MONGO");
+//  protected static final String endpoint = System.getenv("REPROVA_MONGO");
+  protected static final String endpoint = "mongodb://localhost";
 
   /**
    * The mongodb driver instance.

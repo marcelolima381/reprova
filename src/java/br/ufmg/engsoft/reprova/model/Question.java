@@ -34,6 +34,10 @@ public class Question {
    * Whether the question is private.
    */
   public final boolean pvt;
+  /**
+   * Difficulty level (0 to 1).
+   */
+  public final double difficulty;
 
 
 
@@ -47,6 +51,7 @@ public class Question {
     protected String statement;
     protected Map<Semester, Map<String, Float>> record;
     protected boolean pvt = true;
+    protected double difficulty = 0.5;
 
     public Builder id(String id) {
       this.id = id;
@@ -75,6 +80,11 @@ public class Question {
 
     public Builder pvt(boolean pvt) {
       this.pvt = pvt;
+      return this;
+    }
+
+    public Builder difficulty(double difficulty) {
+      this.difficulty = difficulty;
       return this;
     }
 
@@ -112,7 +122,8 @@ public class Question {
         this.description,
         this.statement,
         this.record,
-        this.pvt
+        this.pvt,
+        this.difficulty
       );
     }
   }
@@ -126,7 +137,8 @@ public class Question {
     String description,
     String statement,
     Map<Semester, Map<String, Float>> record,
-    boolean pvt
+    boolean pvt,
+    double difficulty
   ) {
     this.id = id;
     this.theme = theme;
@@ -134,6 +146,7 @@ public class Question {
     this.statement = statement;
     this.record = record;
     this.pvt = pvt;
+    this.difficulty = difficulty;
   }
 
 
@@ -157,7 +170,8 @@ public class Question {
         && this.description.equals(question.description)
         && this.statement.equals(question.statement)
         && this.record.equals(question.record)
-        && this.pvt == question.pvt;
+        && this.pvt == question.pvt
+        && this.difficulty == question.difficulty;
   }
 
 
@@ -169,7 +183,8 @@ public class Question {
       this.description,
       this.statement,
       this.record,
-      this.pvt
+      this.pvt,
+      this.difficulty
     );
   }
 
@@ -187,6 +202,7 @@ public class Question {
     builder.append("  desc: " + this.description + "\n");
     builder.append("  record: " + this.record + "\n");
     builder.append("  pvt: " + this.pvt + "\n");
+    builder.append("  difficulty: " + this.difficulty + "\n");
     if (this.statement != null)
       builder.append(
         "  head: " +

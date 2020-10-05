@@ -96,12 +96,14 @@ public class Questions {
   protected Object get(Request request, Response response) {
     logger.info("Received questions get:");
 
-    var id = request.queryParams("id");
-    var auth = authorised(request.queryParams("token"));
+//    var id = request.queryParams("id");
+//    var auth = authorised(request.queryParams("token"));
 
-    return id == null
-      ? this.get(request, response, auth)
-      : this.get(request, response, id, auth);
+//    return id == null
+//      ? this.get(request, response, true)
+//      : this.get(request, response, id, auth);
+
+    return this.get(request, response, true);
   }
 
   /**
