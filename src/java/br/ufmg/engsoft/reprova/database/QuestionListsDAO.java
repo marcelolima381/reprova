@@ -122,17 +122,14 @@ public class QuestionListsDAO {
    */
   public Collection<QuestionList> list(String theme, Boolean pvt) {
     var filters =
-      Arrays.asList(
-        theme == null ? null : eq("theme", theme),
-        pvt == null ? null : eq("pvt", pvt)
-      )
+      Arrays.asList()
       .stream()
       .filter(Objects::nonNull) // mongo won't allow null filters.
       .collect(Collectors.toList());
 
     var doc = filters.isEmpty() // mongo won't take null as a filter.
       ? this.collection.find()
-      : this.collection.find(and(filters));
+      : this.collection.find();
 
     var result = new ArrayList<QuestionList>();
 

@@ -1,5 +1,7 @@
 package br.ufmg.engsoft.reprova.routes;
 
+import br.ufmg.engsoft.reprova.database.QuestionListsDAO;
+import br.ufmg.engsoft.reprova.routes.api.QuestionLists;
 import spark.Spark;
 
 import org.slf4j.Logger;
@@ -40,7 +42,7 @@ public class Setup {
    * @param questionsDAO  the DAO for Question
    * @throws IllegalArgumentException  if any parameter is null
    */
-  public static void routes(Json json, QuestionsDAO questionsDAO) {
+  public static void routes(Json json, QuestionsDAO questionsDAO, QuestionListsDAO questionListsDAO) {
     if (json == null)
       throw new IllegalArgumentException("json mustn't be null");
 
@@ -58,5 +60,9 @@ public class Setup {
     logger.info("Setting up questions route:");
     var questions = new Questions(json, questionsDAO);
     questions.setup();
+
+    logger.info("Setting up questions route:");
+    var questionLists = new QuestionLists(json, questionListsDAO);
+    questionLists.setup();
   }
 }

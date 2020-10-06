@@ -73,9 +73,9 @@ public class QuestionLists {
      * - delete
      */
     public void setup() {
-        Spark.get("/api/QuestionLists", this::get);
-        Spark.post("/api/QuestionLists", this::post);
-        Spark.delete("/api/QuestionLists", this::delete);
+        Spark.get("/api/question-lists", this::get);
+        Spark.post("/api/question-lists", this::post);
+        Spark.delete("/api/question-lists", this::delete);
 
         logger.info("Setup /api/QuestionLists.");
     }
@@ -96,14 +96,12 @@ public class QuestionLists {
     protected Object get(Request request, Response response) {
         logger.info("Received QuestionLists get:");
 
-//    var id = request.queryParams("id");
+    var id = request.queryParams("id");
 //    var auth = authorised(request.queryParams("token"));
 
-//    return id == null
-//      ? this.get(request, response, true)
-//      : this.get(request, response, id, auth);
-
-        return this.get(request, response, true);
+    return id == null
+      ? this.get(request, response, true)
+      : this.get(request, response, id, true);
     }
 
     /**
@@ -169,13 +167,13 @@ public class QuestionLists {
 
         response.type("application/json");
 
-        var token = request.queryParams("token");
+//        var token = request.queryParams("token");
 
-        if (!authorised(token)) {
-            logger.info("Unauthorised token: " + token);
-            response.status(403);
-            return unauthorised;
-        }
+//        if (!authorised(token)) {
+//            logger.info("Unauthorised token: " + token);
+//            response.status(403);
+//            return unauthorised;
+//        }
 
         QuestionList QuestionList;
         try {
@@ -217,13 +215,12 @@ public class QuestionLists {
         response.type("application/json");
 
         var id = request.queryParams("id");
-        var token = request.queryParams("token");
 
-        if (!authorised(token)) {
-            logger.info("Unauthorised token: " + token);
-            response.status(403);
-            return unauthorised;
-        }
+//        if (!authorised(token)) {
+//            logger.info("Unauthorised token: " + token);
+//            response.status(403);
+//            return unauthorised;
+//        }
 
         if (id == null) {
             logger.error("Invalid request!");

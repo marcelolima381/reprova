@@ -1,15 +1,13 @@
 package br.ufmg.engsoft.reprova.model;
 
-import java.util.ArrayList;
-
 public class QuestionList {
     public final String id;
-    public final ArrayList<Question> questions;
+    public final String questions;
     public final String ownerId;
     
     public static class Builder {
         protected String id;
-        protected ArrayList<Question> questions;
+        protected String questions;
         protected String ownerId;
 
         public QuestionList.Builder id(String id) {
@@ -17,7 +15,7 @@ public class QuestionList {
             return this;
         }
 
-        public QuestionList.Builder questions(ArrayList<Question> questions) {
+        public QuestionList.Builder questions(String questions) {
             this.questions = questions;
             return this;
         }
@@ -37,16 +35,16 @@ public class QuestionList {
                 throw new IllegalArgumentException("ownerId mustn't be null");
 
             return new QuestionList(
-                    this.id,
-                    this.questions,
-                    this.ownerId
+                this.id,
+                this.questions,
+                this.ownerId
             );
         }
     }
 
     protected QuestionList(
             String id,
-            ArrayList<Question> questions,
+            String questions,
             String ownerId
     ) {
         this.id = id;
