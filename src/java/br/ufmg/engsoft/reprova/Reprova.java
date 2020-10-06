@@ -3,6 +3,7 @@ package br.ufmg.engsoft.reprova;
 import br.ufmg.engsoft.reprova.database.Mongo;
 import br.ufmg.engsoft.reprova.database.QuestionListsDAO;
 import br.ufmg.engsoft.reprova.database.QuestionsDAO;
+import br.ufmg.engsoft.reprova.database.TestsDAO;
 import br.ufmg.engsoft.reprova.routes.Setup;
 import br.ufmg.engsoft.reprova.mime.json.Json;
 
@@ -15,8 +16,9 @@ public class Reprova {
 
     var questionsDAO = new QuestionsDAO(db, json);
     var questionListsDAO = new QuestionListsDAO(db, json);
+    var testsDAO = new TestsDAO(db, json);
 
 
-    Setup.routes(json, questionsDAO, questionListsDAO);
+    Setup.routes(json, questionsDAO, questionListsDAO, testsDAO);
   }
 }
