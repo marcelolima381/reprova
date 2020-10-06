@@ -2,6 +2,7 @@ package br.ufmg.engsoft.reprova.database;
 
 import br.ufmg.engsoft.reprova.mime.json.Json;
 import br.ufmg.engsoft.reprova.model.QuestionList;
+import br.ufmg.engsoft.reprova.model.Test;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -66,22 +67,22 @@ public class TestsDAO {
    * @throws IllegalArgumentException  if any parameter is null
    * @throws IllegalArgumentException  if the given document is an invalid QuestionList
    */
-  protected QuestionList parseDoc(Document document) {
+  protected Test parseDoc(Document document) {
     if (document == null)
       throw new IllegalArgumentException("document mustn't be null");
 
     var doc = document.toJson();
 
-    logger.info("Fetched question list: " + doc);
+    logger.info("Fetched test: " + doc);
 
     try {
-      var questionList = json
-        .parse(doc, QuestionList.Builder.class)
+      var test = json
+        .parse(doc, Test.Builder.class)
         .build();
 
-      logger.info("Parsed question list: " + questionList);
+      logger.info("Parsed question list: " + test);
 
-      return questionList;
+      return test;
     }
     catch (Exception e) {
       logger.error("Invalid document in database!", e);
@@ -96,32 +97,30 @@ public class TestsDAO {
    * @return The question list, or null if no such question list.
    * @throws IllegalArgumentException  if any parameter is null
    */
-  public QuestionList get(String id) {
+  public Test get(String id) {
     if (id == null)
       throw new IllegalArgumentException("id mustn't be null");
 
-    var questionList = this.collection
+    var test = this.collection
       .find(eq(new ObjectId(id)))
       .map(this::parseDoc)
       .first();
 
-    if (questionList == null)
+    if (test == null)
       logger.info("No such question list " + id);
 
-    return questionList;
+    return test;
   }
 
 
   /**
    * List all the question lists that match the given non-null parameters.
    * The question lists's statement is ommited.
-   * @param theme      the expected theme, or null
-   * @param pvt        the expected privacy, or null
    * @return The questions in the collection that match the given parameters, possibly
    *         empty.
    * @throws IllegalArgumentException  if there is an invalid Question List
    */
-  public Collection<QuestionList> list(String theme, Boolean pvt) {
+  public Collection<Test> list() {
     var filters =
       Arrays.asList()
       .stream()
@@ -132,9 +131,9 @@ public class TestsDAO {
       ? this.collection.find()
       : this.collection.find();
 
-    var result = new ArrayList<QuestionList>();
+    var result = new ArrayList<Test>();
 
-    doc.projection(fields(exclude("statement")))
+    doc.projection(fields())
       .map(this::parseDoc)
       .into(result);
 
@@ -145,19 +144,20 @@ public class TestsDAO {
   /**
    * Adds or updates the given question list in the database.
    * If the given question list has an id, update, otherwise add.
-   * @param questionList list the question list to be stored
+   * @param test list the question list to be stored
    * @return Whether the question was successfully added.
    * @throws IllegalArgumentException  if any parameter is null
    */
-  public boolean add(QuestionList questionList) {
-    if (questionList == null)
+  public boolean add(Test test) {
+    if (test == null)
       throw new IllegalArgumentException("question list mustn't be null");
 
     Document doc = new Document()
-      .append("questions", questionList.questions)
-      .append("ownerId", questionList.ownerId);
+      .append("questions", test.questions)
+      .append("ownerId", test.ownerId)
+      .append("time", test.time);
 
-    var id = questionList.id;
+    var id = test.id;
     if (id != null) {
       var result = this.collection.replaceOne(
         eq(new ObjectId(id)),

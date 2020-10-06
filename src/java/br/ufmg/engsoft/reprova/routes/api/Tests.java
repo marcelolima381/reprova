@@ -3,6 +3,7 @@ package br.ufmg.engsoft.reprova.routes.api;
 import br.ufmg.engsoft.reprova.database.TestsDAO;
 import br.ufmg.engsoft.reprova.mime.json.Json;
 import br.ufmg.engsoft.reprova.model.QuestionList;
+import br.ufmg.engsoft.reprova.model.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -11,7 +12,7 @@ import spark.Spark;
 
 
 /**
- * QuestionLists route.
+ * Test route.
  */
 public class Tests {
     /**
@@ -75,7 +76,7 @@ public class Tests {
         Spark.post("/api/tests", this::post);
         Spark.delete("/api/tests", this::delete);
 
-        logger.info("Setup /api/QuestionLists.");
+        logger.info("Setup /api/tests.");
     }
 
 
@@ -114,9 +115,9 @@ public class Tests {
 
         logger.info("Fetching QuestionList " + id);
 
-        var QuestionList = testsDAO.get(id);
+        var test = testsDAO.get(id);
 
-        if (QuestionList == null) {
+        if (test == null) {
             logger.error("Invalid request!");
             response.status(400);
             return invalid;
@@ -126,7 +127,7 @@ public class Tests {
 
         response.status(200);
 
-        return json.render(QuestionList);
+        return json.render(test);
     }
 
     /**
@@ -138,16 +139,13 @@ public class Tests {
 
         logger.info("Fetching QuestionLists.");
 
-        var QuestionLists = testsDAO.list(
-                null, // theme filtering is not implemented in this endpoint.
-                auth ? null : false
-        );
+        var test = testsDAO.list();
 
         logger.info("Done. Responding...");
 
         response.status(200);
 
-        return json.render(QuestionLists);
+        return json.render(test);
     }
 
 
@@ -173,10 +171,10 @@ public class Tests {
 //            return unauthorised;
 //        }
 
-        QuestionList QuestionList;
+        Test test;
         try {
-            QuestionList = json
-                    .parse(body, QuestionList.Builder.class)
+            test = json
+                    .parse(body, Test.Builder.class)
                     .build();
         }
         catch (Exception e) {
@@ -185,11 +183,11 @@ public class Tests {
             return invalid;
         }
 
-        logger.info("Parsed " + QuestionList.toString());
+        logger.info("Parsed " + test.toString());
 
         logger.info("Adding QuestionList.");
 
-        var success = testsDAO.add(QuestionList);
+        var success = testsDAO.add(test);
 
         response.status(
                 success ? 200

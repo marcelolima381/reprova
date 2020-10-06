@@ -4,11 +4,13 @@ public class Test {
     public final String id;
     public final String questions;
     public final String ownerId;
+    public final int time;
 
     public static class Builder {
         protected String id;
         protected String questions;
         protected String ownerId;
+        protected int time;
 
         public Test.Builder id(String id) {
             this.id = id;
@@ -25,6 +27,11 @@ public class Test {
             return this;
         }
 
+        public Test.Builder time(int time) {
+            this.time = time;
+            return this;
+        }
+
 
         /**
          * Build the question.
@@ -37,7 +44,8 @@ public class Test {
             return new Test(
                 this.id,
                 this.questions,
-                this.ownerId
+                this.ownerId,
+                this.time
             );
         }
     }
@@ -45,10 +53,12 @@ public class Test {
     protected Test(
             String id,
             String questions,
-            String ownerId
+            String ownerId,
+            int time
     ) {
         this.id = id;
         this.questions = questions;
         this.ownerId = ownerId;
+        this.time = time;
     }
 }
