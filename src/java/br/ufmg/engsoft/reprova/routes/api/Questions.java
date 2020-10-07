@@ -85,7 +85,7 @@ public class Questions {
    * Check if the given token is authorised.
    */
   protected static boolean authorised(String token) {
-    return Questions.token.equals(token);
+    return true;
   }
 
 
@@ -97,11 +97,11 @@ public class Questions {
     logger.info("Received questions get:");
 
     var id = request.queryParams("id");
-    var auth = authorised(request.queryParams("token"));
+//    var auth = authorised(request.queryParams("token"));
 
     return id == null
-      ? this.get(request, response, auth)
-      : this.get(request, response, id, auth);
+      ? this.get(request, response, true)
+      : this.get(request, response, id, true);
   }
 
   /**
@@ -173,13 +173,13 @@ public class Questions {
 
     response.type("application/json");
 
-    var token = request.queryParams("token");
+//    var token = request.queryParams("token");
 
-    if (!authorised(token)) {
-      logger.info("Unauthorised token: " + token);
-      response.status(403);
-      return unauthorised;
-    }
+//    if (!authorised(token)) {
+//      logger.info("Unauthorised token: " + token);
+//      response.status(403);
+//      return unauthorised;
+//    }
 
     Question question;
     try {
